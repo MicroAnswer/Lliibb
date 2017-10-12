@@ -11,24 +11,30 @@
       android:layout_height="wrap_content"
       android:orientation="vertical"
       tools:context="answer.android.llliibb.MainActivity">
-
     <TextView
         android:layout_width="match_parent"
-        android:paddingBottom="30dp"
-        android:text="点击下方的展开按钮即可擦看全部内容"
-        android:layout_height="wrap_content"/>
+        android:text="请点击下面的按钮"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
 
     <answer.android.views.ExpandView
         android:id="@+id/asdasd"
+        app:unexpanHeight="0dp"
+        app:animTime="1500"
         android:layout_width="match_parent"
-        app:unexpanHeight="400px"
         android:layout_height="wrap_content">
+
 
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:text="哈哈"
+            android:layout_height="match_parent" />
         <ImageView
             android:layout_width="match_parent"
             android:src="@mipmap/ic_launcher"
@@ -38,19 +44,21 @@
             android:layout_height="wrap_content"
             android:text="@string/testvalue"/>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:src="@mipmap/ic_launcher"
-            android:layout_height="wrap_content"/>
-
       </LinearLayout>
     </answer.android.views.ExpandView>
 
     <Button
+        android:id="@+id/ss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="togg"
         android:text="展开"/>
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:max="100"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_height="wrap_content" />
 
   </LinearLayout>
 </ScrollView>

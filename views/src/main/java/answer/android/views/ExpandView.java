@@ -26,6 +26,8 @@ public class ExpandView extends ViewGroup {
 
     private Scroller scroller;
 
+    private OnExpanListener onExpanListener;
+
     public ExpandView(Context context) {
         super(context);
         init(context, null);
@@ -56,12 +58,17 @@ public class ExpandView extends ViewGroup {
         if (attributeSet != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.ExpandView);
             unExpanHeight = typedArray.getDimensionPixelSize(R.styleable.ExpandView_unexpanHeight, unExpanHeight);
+            if (unExpanHeight <= 0) {
+                // 传递的值过小,
+                unExpanHeight = 0;
+            }
+            animTime = typedArray.getInteger(R.styleable.ExpandView_animTime, animTime);
+            if (animTime < 1) {
+                animTime = 400;
+            }
             typedArray.recycle();
         }
 
-        scroller = new Scroller(context);
-
-        // setOnClickListener(this);
     }
 
     /**
@@ -72,7 +79,7 @@ public class ExpandView extends ViewGroup {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         /**
          * 测量规则:
          *  宽度直接使用子View的宽度,
@@ -88,6 +95,13 @@ public class ExpandView extends ViewGroup {
 
         if (opening || closeing) {
             setMeasuredDimension(childWidth, layoutHeight);
+            if (layoutHeight == 0 && closeing && scroller != null) {
+                // 当0被设置为测量结果时，不会调用draw方法, 也就不会再computescroll什么的了。此处手动调用
+                closeing = false;
+                opening = false;
+                scroller.abortAnimation();
+                computeScroll();
+            }
             return;
         }
 
@@ -121,18 +135,25 @@ public class ExpandView extends ViewGroup {
         View childView = getAndCheckChildView();
 
         if (childView != null) {
-            childView.layout(0, 0, r, t + getMeasuredHeight());
+            int h = getMeasuredHeight();
+            childView.layout(0, 0, r, h);
         } else {
             Log.w("ExpandView", "ExpandView has no child.");
         }
     }
 
+    /**
+     * 展开，只有在控件是关闭的状态有用
+     */
     public void expan() {
         if (!isExpan) {
             toggle();
         }
     }
 
+    /**
+     * 收缩， 只有在控件是展开状态可用
+     */
     public void unExpan() {
         if (isExpan) {
             toggle();
@@ -146,46 +167,58 @@ public class ExpandView extends ViewGroup {
         }
 
         if (childHeight < unExpanHeight) {
-            // Log.i("ExpandView", "子控件小于最小高度");
+            Log.i("ExpandView", "子控件小于最小高度");
             // 子试图高度小于最小高度
             return;
         }
-
+        if (scroller == null) {
+            scroller = new Scroller(getContext());
+        }
         if (isExpan) {
             // 如果是打开的,就要缩小,
             closeing = true;
             opening = false;
-            scroller.startScroll(getMeasuredHeight(), 0, -(getMeasuredHeight() - unExpanHeight), 0,animTime);
+            scroller.startScroll(getMeasuredHeight(), 0, -(getMeasuredHeight() - unExpanHeight), 0, animTime);
             // Toast.makeText(getContext(), "收缩", Toast.LENGTH_SHORT).show();
         } else {
             closeing = false;
             opening = true;
-            scroller.startScroll(getMeasuredHeight(), 0, childHeight - getMeasuredHeight(), 0,animTime);
+            scroller.startScroll(getMeasuredHeight(), 0, childHeight - getMeasuredHeight(), 0, animTime);
             // Toast.makeText(getContext(), "展开", Toast.LENGTH_SHORT).show();
         }
         // Log.i("ExpandView", "开始i动作");
+//        requestLayout();
         isExpan = !isExpan;
-        requestLayout();
+
+
         invalidate();
     }
 
     @Override
     public void computeScroll() {
-        if (scroller.computeScrollOffset()) {
-            layoutHeight = scroller.getCurrX();
-            requestLayout();
-            invalidate();
-            if (scroller.isFinished()) {
-                // Log.i("ExpandView", "完成22");
-                closeing = false;
-                opening = false;
-            }
-        } else {
+        super.computeScroll();
+        if (null == scroller) {
+            return;
+        }
+        boolean isScrolling = scroller.computeScrollOffset();
+        // Log.i("ExpandView", String.valueOf(isScrolling));
+        if (!isScrolling) {
             // Log.i("ExpandView", "完成");
             closeing = false;
             opening = false;
+            if (onExpanListener != null) {
+                onExpanListener.onToggled(this, isExpan);
+            }
+        } else {
+            layoutHeight = scroller.getCurrX();
+            invalidate();
+            requestLayout();
+            float p = (layoutHeight - unExpanHeight) / (float) (childHeight - unExpanHeight);
+            // Log.i("ExpandView", String.valueOf(p));
+            if (onExpanListener != null) {
+                onExpanListener.onToggleing(this, p);
+            }
         }
-        super.computeScroll();
     }
 
     /**
@@ -210,9 +243,37 @@ public class ExpandView extends ViewGroup {
         return view;
     }
 
+    public OnExpanListener getOnExpanListener() {
+        return onExpanListener;
+    }
+
+    public void setOnExpanListener(OnExpanListener onExpanListener) {
+        this.onExpanListener = onExpanListener;
+    }
 
     private float dp2px(Context context, float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
+
+    public interface OnExpanListener {
+        /**
+         * 控件从关闭状态改变到开启状态，开启完成后回调
+         * 控件从开启状态改变到关闭状态，关闭完成后回调
+         * <p>
+         * 总之， 展开完成调，收缩完成也回调
+         *
+         * @param expandView
+         * @param isOpen     展开、收拢状态
+         */
+        void onToggled(ExpandView expandView, boolean isOpen);
+
+        /**
+         * 控件在打开或关闭的过程中回调。
+         *
+         * @param expandView
+         * @param percent    当前打开的高度 除以 总高度
+         */
+        void onToggleing(ExpandView expandView, float percent);
+    }
 }

@@ -3,5 +3,7 @@
   <declare-styleable name="ExpandView">
     <!-- 没有展开的时候View的高度 -->
     <attr name="unexpanHeight" format="dimension"/>
+    <!-- 展开关闭动画时长 -->
+    <attr name="animTime" format="integer"/>
   </declare-styleable>
 </resources>
