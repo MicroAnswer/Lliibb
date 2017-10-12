@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="ExpandView">
+    <!-- 没有展开的时候View的高度 -->
+    <attr name="unexpanHeight" format="dimension"/>
+  </declare-styleable>
+</resources>
