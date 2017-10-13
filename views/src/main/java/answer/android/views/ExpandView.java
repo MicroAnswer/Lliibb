@@ -24,6 +24,8 @@ public class ExpandView extends ViewGroup {
     private int layoutHeight;
     private int animTime = 400; // ms
 
+    private boolean fromuser; // 标记是用户操作
+
     private Scroller scroller;
 
     private OnExpanListener onExpanListener;
@@ -79,7 +81,7 @@ public class ExpandView extends ViewGroup {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        // super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         /**
          * 测量规则:
          *  宽度直接使用子View的宽度,
@@ -90,22 +92,30 @@ public class ExpandView extends ViewGroup {
 
         View child = getAndCheckChildView(); // 获取到子View.
 
-        child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-        int childWidth = child.getMeasuredWidth();
-
         if (opening || closeing) {
-            setMeasuredDimension(childWidth, layoutHeight);
+            setMeasuredDimension(getMeasuredWidth(), layoutHeight);
             if (layoutHeight == 0 && closeing && scroller != null) {
                 // 当0被设置为测量结果时，不会调用draw方法, 也就不会再computescroll什么的了。此处手动调用
                 closeing = false;
+                // Log.i("ExpandView", "sd" + String.valueOf(layoutHeight));
                 opening = false;
+                fromuser = false;
                 scroller.abortAnimation();
+                scroller.forceFinished(true);
                 computeScroll();
             }
             return;
         }
 
-        childHeight = child.getMeasuredHeight();
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+
+        child.measure(MeasureSpec.makeMeasureSpec(widthSize - getPaddingLeft() - getPaddingRight(), MeasureSpec.AT_MOST),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+
+        int childWidth = widthSize;
+
+        childHeight = child.getMeasuredHeight() + getPaddingTop() + getPaddingBottom();
         int height = unExpanHeight;
         if (!isExpan) {
             if (childHeight > unExpanHeight) {
@@ -133,10 +143,11 @@ public class ExpandView extends ViewGroup {
     protected void onLayout(boolean bo, int l, int t, int r, int b) {
 
         View childView = getAndCheckChildView();
+        // Log.i("ExpandView", "l=" + l + ",t=" + t + ",r=" + r + ",b=" + b);
 
         if (childView != null) {
-            int h = getMeasuredHeight();
-            childView.layout(0, 0, r, h);
+            int h = getMeasuredHeight() + getPaddingBottom() + getPaddingTop();
+            childView.layout(getPaddingLeft(), getPaddingTop(), r - getPaddingRight(), h);
         } else {
             Log.w("ExpandView", "ExpandView has no child.");
         }
@@ -145,35 +156,71 @@ public class ExpandView extends ViewGroup {
     /**
      * 展开，只有在控件是关闭的状态有用
      */
-    public void expan() {
+    public boolean expan() {
         if (!isExpan) {
-            toggle();
+            return toggle();
         }
+        return false;
     }
 
     /**
      * 收缩， 只有在控件是展开状态可用
      */
-    public void unExpan() {
+    public boolean unExpan() {
         if (isExpan) {
-            toggle();
+            return toggle();
         }
+        return false;
     }
 
-    public void toggle() {
+    public boolean close() {
+        return isExpan && toggle(false);
+    }
+
+    public boolean open() {
+        return !isExpan && toggle(false);
+    }
+
+    public boolean toggle() {
+        return toggle(true);
+    }
+
+    public boolean toggle(boolean b) {
+        // 如果不是用动画，直接变化
+        if(!b) {
+            if(isExpan) {
+                closeing = true;
+                opening = false;
+                layoutHeight = unExpanHeight;
+            } else {
+                closeing = false;
+                opening = true;
+                layoutHeight = childHeight;
+            }
+            isExpan = !isExpan;
+            requestLayout();
+            invalidate();
+            if(onExpanListener!=null){
+                onExpanListener.onToggled(this, isExpan);
+            }
+            return true;
+        }
+
         if (closeing || opening) {
             // Log.i("ExpandView", "正在动作中。。。");
-            return; // 正在打开或者关闭的时候不进行操作
+            return false; // 正在打开或者关闭的时候不进行操作
         }
 
         if (childHeight < unExpanHeight) {
             Log.i("ExpandView", "子控件小于最小高度");
             // 子试图高度小于最小高度
-            return;
+            return false;
         }
         if (scroller == null) {
             scroller = new Scroller(getContext());
         }
+        scroller.forceFinished(true);
+        scroller.abortAnimation();
         if (isExpan) {
             // 如果是打开的,就要缩小,
             closeing = true;
@@ -184,40 +231,51 @@ public class ExpandView extends ViewGroup {
             closeing = false;
             opening = true;
             scroller.startScroll(getMeasuredHeight(), 0, childHeight - getMeasuredHeight(), 0, animTime);
+            // Log.i("ExpandView", String.valueOf("" + getMeasuredHeight() + 0 + (childHeight - getMeasuredHeight()) + 0 + animTime));
             // Toast.makeText(getContext(), "展开", Toast.LENGTH_SHORT).show();
         }
-        // Log.i("ExpandView", "开始i动作");
-//        requestLayout();
+        // Log.i("ExpandView", "开始动作");
         isExpan = !isExpan;
 
-
+        fromuser = true;
+        forceLayout();
+        requestLayout();
         invalidate();
+        return true;
     }
 
     @Override
     public void computeScroll() {
         super.computeScroll();
+        // Log.i("ExpandView", "computeScroll:" + scroller);
         if (null == scroller) {
             return;
         }
-        boolean isScrolling = scroller.computeScrollOffset();
-        // Log.i("ExpandView", String.valueOf(isScrolling));
-        if (!isScrolling) {
-            // Log.i("ExpandView", "完成");
-            closeing = false;
-            opening = false;
-            if (onExpanListener != null) {
-                onExpanListener.onToggled(this, isExpan);
+        if (fromuser) {
+            boolean isScrolling = scroller.computeScrollOffset();
+            // Log.i("ExpandView", "isflish:" + String.valueOf(scroller.getFinalX() + " : " + scroller.getCurrX()));
+            if (scroller.getFinalX() == scroller.getCurrX()) {
+                // Log.i("ExpandView", "完成");
+                fromuser = false;
+                closeing = false;
+                opening = false;
+                if (onExpanListener != null) {
+                    onExpanListener.onToggled(this, isExpan);
+                }
+            } else {
+                layoutHeight = scroller.getCurrX();
+                forceLayout();
+                invalidate();
+                requestLayout();
+                float p = (layoutHeight - unExpanHeight) / (float) (childHeight - unExpanHeight);
+                // Log.i("ExpandView", "p"+String.valueOf(p));
+                if (onExpanListener != null) {
+                    onExpanListener.onToggleing(this, p);
+                }
             }
         } else {
-            layoutHeight = scroller.getCurrX();
-            invalidate();
-            requestLayout();
-            float p = (layoutHeight - unExpanHeight) / (float) (childHeight - unExpanHeight);
-            // Log.i("ExpandView", String.valueOf(p));
-            if (onExpanListener != null) {
-                onExpanListener.onToggleing(this, p);
-            }
+            opening = false;
+            closeing = false;
         }
     }
 
