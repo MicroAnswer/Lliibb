@@ -28,11 +28,6 @@ public abstract class EasyAcctivity extends AppCompatActivity {
         setStatusBarNice();
         super.onCreate(savedInstanceState);
         onCreat(savedInstanceState);
-        ViewGroup contentFrameLayout = (ViewGroup) findViewById(Window.ID_ANDROID_CONTENT);
-        View parentView = contentFrameLayout.getChildAt(0);
-        if (parentView != null && Build.VERSION.SDK_INT >= 15) {
-            parentView.setFitsSystemWindows(true);
-        }
         setToolBar();
     }
 
@@ -140,6 +135,7 @@ public abstract class EasyAcctivity extends AppCompatActivity {
 
     /**
      * 弹出警告框
+     *
      * @param title
      * @param msg
      * @param onClickListener
