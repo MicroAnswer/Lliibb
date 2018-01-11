@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Light" parent="Theme.AppCompat.Light.NoActionBar">
+    <!--在4.4及以上支持沉浸式状态栏-->
+    <!--<item name="android:windowTranslucentStatus">true</item>-->
+    <!-- 导航栏看需求。 -->
+    <!-- <item name="android:windowTranslucentNavigation">true</item> -->
+
+  </style>
+</resources>

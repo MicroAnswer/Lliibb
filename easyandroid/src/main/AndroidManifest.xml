@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="answer.android.easyandroid">
+
+  <application>
+
+    <activity
+        android:name=".activity.EasyAcctivity"
+        android:theme="@style/Light"/>
+
+  </application>
+
+</manifest>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="ExpandView">
+    <!-- 没有展开的时候View的高度 -->
+    <attr name="unexpanHeight" format="dimension"/>
+    <!-- 展开关闭动画时长 -->
+    <attr name="animTime" format="integer"/>
+  </declare-styleable>
+
+  <declare-styleable name="Group">
+    <attr name="title" format="string"/>
+    <attr name="titleBackground" format="reference"/>
+  </declare-styleable>
+
+  <declare-styleable name="Cell">
+
+    <attr name="underLine" format="dimension"/>
+    <attr name="underLineColor" format="color"/>
+    <attr name="icon" format="reference"/>
+    <attr name="iconPadding" format="dimension"/>
+    <attr name="titLe" format="string"/>
+    <attr name="desc" format="string"/>
+
+  </declare-styleable>
+
+</resources>

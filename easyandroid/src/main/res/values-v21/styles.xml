@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="Light" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Android5.0的设置成false -->
+    <!--<item name="android:windowTranslucentStatus">true</item>-->
+
+    <!-- 导航栏看需求。 -->
+    <!-- <item name="android:windowTranslucentNavigation">true</item> -->
+    <!--Android 5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色-->
+    <!--<item name="android:statusBarColor">#0ff00f</item>-->
+
+  </style>
+
+</resources>
