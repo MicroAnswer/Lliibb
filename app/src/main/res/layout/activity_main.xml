@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="bottom"
     android:orientation="vertical">
 
   <android.support.v7.widget.Toolbar
@@ -11,7 +12,6 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@color/colorPrimary"
-      android:fitsSystemWindows="true"
       app:title="@string/app_name"/>
 
   <ScrollView
@@ -281,8 +281,22 @@
             app:desc="Android 7.1.2"
             app:icon="@drawable/ic_perm_device"
             app:titLe="关于手机"/>
+
+        <answer.android.easyandroid.view.Cell
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingLeft="10dp"
+            app:desc="点击查看导航栏高度"
+            android:id="@+id/seeNavigationHeightCell"
+            app:icon="@mipmap/ic_launcher"
+            app:titLe="导航栏高度"/>
+
+
       </answer.android.easyandroid.view.Group>
 
     </LinearLayout>
+
   </ScrollView>
+
 </LinearLayout>

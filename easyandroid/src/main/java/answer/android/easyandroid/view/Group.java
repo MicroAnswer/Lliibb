@@ -60,6 +60,8 @@ public class Group extends LinearLayout {
         // 固定使用竖向布局
         setOrientation(VERTICAL);
 
+        setBackgroundColor(-1);
+
         if (attributeSet != null) {
 
             TypedArray typedArray = c.obtainStyledAttributes(attributeSet, R.styleable.Group);
