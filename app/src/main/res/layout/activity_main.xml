@@ -1,302 +1,356 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
-  <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@color/colorPrimary"
-      app:title="@string/app_name"/>
-
-  <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-      <answer.android.easyandroid.view.Group
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:title="无线和网络">
-
-        <answer.android.easyandroid.view.Cell
+        android:background="@color/colorPrimary"
+        app:title="@string/app_name" />
+    <FrameLayout
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="“JSB_MERCURY_5G”"
-            app:icon="@drawable/ic_wifi"
-            app:titLe="WLAN"/>
+            android:layout_height="wrap_content">
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="已停用"
-            app:icon="@drawable/ic_bluetooth"
-            app:titLe="蓝牙"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="已使用 708 MB"
-            app:icon="@drawable/ic_sim"
-            app:titLe="流量使用情况"/>
+                <answer.android.easyandroid.view.Group
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="无线和网络">
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:icon="@drawable/ic_more"
-            app:titLe="更多"/>
-      </answer.android.easyandroid.view.Group>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="“JSB_MERCURY_5G”"
+                        app:icon="@drawable/ic_wifi"
+                        app:titLe="WLAN" />
 
-      <answer.android.easyandroid.view.Group
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:title="Rom 控制">
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="已停用"
+                        app:icon="@drawable/ic_bluetooth"
+                        app:titLe="蓝牙" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="ROM 功能和自定义"
-            app:icon="@drawable/ic_public"
-            app:titLe="PureNexus 设置"/>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="已使用 708 MB"
+                        app:icon="@drawable/ic_sim"
+                        app:titLe="流量使用情况" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="模块管理及设置"
-            app:icon="@drawable/ic_android"
-            app:titLe="Magisk 管理器"/>
-      </answer.android.easyandroid.view.Group>
+                    <answer.android.easyandroid.view.Cell
+                        android:id="@+id/seeMoreCell"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:icon="@drawable/ic_more"
+                        app:titLe="更多">
 
-      <answer.android.easyandroid.view.Group
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:title="设备">
+                        <ImageView
+                            android:id="@+id/seeMoreIconImageView"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/ic_chevron_right" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="自动调节亮度功能已开启"
-            app:icon="@drawable/ic_fullscreen"
-            app:titLe="显示"/>
+                    </answer.android.easyandroid.view.Cell>
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="已禁止 1 个应用发送通知"
-            app:icon="@drawable/ic_notifications"
-            app:titLe="通知"/>
+                    <answer.android.easyandroid.view.ExpandView
+                        android:id="@+id/moreSet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:unexpanHeight="0dp">
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="铃声音量为 43%"
-            app:icon="@drawable/ic_settings_voice"
-            app:titLe="声音"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="已安装 52 个应用"
-            app:icon="@drawable/ic_apps"
-            app:titLe="应用"/>
+                            <answer.android.easyandroid.view.Cell
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?android:attr/selectableItemBackground"
+                                android:paddingLeft="10dp"
+                                app:desc="NFC 已关闭"
+                                app:titLe="NFC 设置" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="已使用 19.91 GB （共 29.12 GB）"
-            app:icon="@drawable/ic_sd"
-            app:titLe="存储"/>
+                            <answer.android.easyandroid.view.Cell
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?android:attr/selectableItemBackground"
+                                android:paddingLeft="10dp"
+                                app:desc="优先 4G 网络"
+                                app:titLe="4G 网络设置" />
+
+                            <answer.android.easyandroid.view.Cell
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?android:attr/selectableItemBackground"
+                                android:paddingLeft="10dp"
+                                app:titLe="其它无限网络" />
+
+                        </LinearLayout>
 
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="平均内存用量为 2.4 GB， 共 3 GB"
-            app:icon="@drawable/ic_disc"
-            app:titLe="内存"/>
+                    </answer.android.easyandroid.view.ExpandView>
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="目前登录的用户名为：Microanswer"
-            app:icon="@drawable/ic_account"
-            app:titLe="用户"/>
+                </answer.android.easyandroid.view.Group>
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:icon="@drawable/ic_payment"
-            app:titLe="触碰付款"/>
+                <answer.android.easyandroid.view.Group
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="Rom 控制">
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="通过简单的手势控制手机"
-            app:icon="@drawable/ic_touch"
-            app:titLe="手势"/>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="ROM 功能和自定义"
+                        app:icon="@drawable/ic_public"
+                        app:titLe="PureNexus 设置" />
 
-      </answer.android.easyandroid.view.Group>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="模块管理及设置"
+                        app:icon="@drawable/ic_android"
+                        app:titLe="Magisk 管理器" />
+                </answer.android.easyandroid.view.Group>
 
-      <answer.android.easyandroid.view.Group
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:title="隐私">
+                <answer.android.easyandroid.view.Group
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="设备">
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="关闭"
-            app:icon="@drawable/ic_location"
-            app:titLe="位置信息"/>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="自动调节亮度功能已开启"
+                        app:icon="@drawable/ic_fullscreen"
+                        app:titLe="显示" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:icon="@drawable/ic_security"
-            app:titLe="安全"/>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="已禁止 1 个应用发送通知"
+                        app:icon="@drawable/ic_notifications"
+                        app:titLe="通知" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:icon="@drawable/ic_confirmation"
-            app:titLe="账号"/>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="铃声音量为 43%"
+                        app:icon="@drawable/ic_settings_voice"
+                        app:titLe="声音" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:icon="@drawable/ic_person"
-            app:titLe="Google"/>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="已安装 52 个应用"
+                        app:icon="@drawable/ic_apps"
+                        app:titLe="应用" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="简体中文（中国）"
-            app:icon="@drawable/ic_keyboard"
-            app:titLe="语言和输入法"/>
-
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:icon="@drawable/ic_backup"
-            app:titLe="备份和重置"/>
-
-      </answer.android.easyandroid.view.Group>
-
-      <answer.android.easyandroid.view.Group
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:title="系统">
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="已使用 19.91 GB （共 29.12 GB）"
+                        app:icon="@drawable/ic_sd"
+                        app:titLe="存储" />
 
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="GMT+08.00 中国标准时间"
-            app:icon="@drawable/ic_access_time"
-            app:titLe="时间和日期"/>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="平均内存用量为 2.4 GB， 共 3 GB"
+                        app:icon="@drawable/ic_disc"
+                        app:titLe="内存" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:icon="@drawable/ic_live_help"
-            app:titLe="无障碍"/>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="目前登录的用户名为：Microanswer"
+                        app:icon="@drawable/ic_account"
+                        app:titLe="用户" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="0 项打印任务"
-            app:icon="@drawable/ic_print"
-            app:titLe="打印"/>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:icon="@drawable/ic_payment"
+                        app:titLe="触碰付款" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:icon="@drawable/ic_develope"
-            app:titLe="开发者选项"/>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="通过简单的手势控制手机"
+                        app:icon="@drawable/ic_touch"
+                        app:titLe="手势" />
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="Android 7.1.2"
-            app:icon="@drawable/ic_perm_device"
-            app:titLe="关于手机"/>
+                </answer.android.easyandroid.view.Group>
 
-        <answer.android.easyandroid.view.Cell
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="10dp"
-            app:desc="点击查看导航栏高度"
-            android:id="@+id/seeNavigationHeightCell"
-            app:icon="@mipmap/ic_launcher"
-            app:titLe="导航栏高度"/>
+                <answer.android.easyandroid.view.Group
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="隐私">
+
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="关闭"
+                        app:icon="@drawable/ic_location"
+                        app:titLe="位置信息" />
+
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:icon="@drawable/ic_security"
+                        app:titLe="安全" />
+
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:icon="@drawable/ic_confirmation"
+                        app:titLe="账号" />
+
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:icon="@drawable/ic_person"
+                        app:titLe="Google" />
+
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="简体中文（中国）"
+                        app:icon="@drawable/ic_keyboard"
+                        app:titLe="语言和输入法" />
+
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:icon="@drawable/ic_backup"
+                        app:titLe="备份和重置" />
+
+                </answer.android.easyandroid.view.Group>
+
+                <answer.android.easyandroid.view.Group
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="系统">
 
 
-      </answer.android.easyandroid.view.Group>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="GMT+08.00 中国标准时间"
+                        app:icon="@drawable/ic_access_time"
+                        app:titLe="时间和日期" />
 
-    </LinearLayout>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:icon="@drawable/ic_live_help"
+                        app:titLe="无障碍" />
 
-  </ScrollView>
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="0 项打印任务"
+                        app:icon="@drawable/ic_print"
+                        app:titLe="打印" />
 
+                    <answer.android.easyandroid.view.Cell
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:icon="@drawable/ic_develope"
+                        app:titLe="开发者选项" />
+
+                    <answer.android.easyandroid.view.Cell
+                        android:id="@+id/aboutCell"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="Android 7.1.2"
+                        app:icon="@drawable/ic_perm_device"
+                        app:titLe="关于手机" />
+
+                    <answer.android.easyandroid.view.Cell
+                        android:id="@+id/seeNavigationHeightCell"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:paddingLeft="10dp"
+                        app:desc="点击查看导航栏高度"
+                        app:icon="@mipmap/ic_launcher"
+                        app:titLe="导航栏高度" />
+
+
+                </answer.android.easyandroid.view.Group>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </FrameLayout>
 </LinearLayout>

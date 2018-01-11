@@ -1,1 +1,1 @@
-include ':app', ':views', ':viewshoter', ':easyandroid'
+include ':app', ':views', ':easyandroid'
