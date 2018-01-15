@@ -2,6 +2,7 @@
 <resources>
 
   <style name="Light" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="android:fitsSystemWindows">true</item>
     <!-- Android5.0的设置成false -->
     <!--<item name="android:windowTranslucentStatus">true</item>-->
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="无线和网络">
+        <menu>
+            <group>
+                <item android:title="WLAN"/>
+                <item android:title="蓝牙" />
+                <item android:title="流量使用情况" />
+                <item android:title="更多" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="Rom 控制">
+        <menu>
+            <group>
+                <item android:title="PureNexus 设置" />
+                <item android:title="Magisk 管理器" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="设备">
+        <menu>
+            <group>
+                <item android:title="显示" />
+                <item android:title="同之" />
+                <item android:title="声音" />
+                <item android:title="应用" />
+                <item android:title="存储" />
+                <item android:title="内存" />
+                <item android:title="用户" />
+                <item android:title="触碰付款" />
+                <item android:title="手势" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="隐私">
+        <menu>
+            <group>
+                <item android:title="位置信息" />
+                <item android:title="安全" />
+                <item android:title="账号" />
+                <item android:title="Google" />
+                <item android:title="语言和输入法" />
+                <item android:title="备份和重置" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="系统">
+        <menu>
+            <group>
+                <item android:title="时间和日期" />
+                <item android:title="无障碍" />
+                <item android:title="打印" />
+                <item android:title="开发者选项" />
+                <item android:title="关于手机" />
+            </group>
+        </menu>
+    </item>
+</menu>

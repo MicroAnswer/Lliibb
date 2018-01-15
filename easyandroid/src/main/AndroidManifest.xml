@@ -2,11 +2,6 @@
           package="answer.android.easyandroid">
 
   <application>
-
-    <activity
-        android:name=".activity.EasyAcctivity"
-        android:theme="@style/Light"/>
-
   </application>
 
 </manifest>
