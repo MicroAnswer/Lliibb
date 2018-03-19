@@ -32,15 +32,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:title="无线和网络">
-
                     <answer.android.easyandroid.view.Cell
+                        android:id="@+id/picLock"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?android:attr/selectableItemBackground"
                         android:paddingLeft="10dp"
-                        app:desc="“JSB_MERCURY_5G”"
+                        app:desc="Android 中较为常用的解锁方式"
                         app:icon="@drawable/ic_wifi"
-                        app:titLe="WLAN" />
+                        app:titLe="图案解锁" />
 
                     <answer.android.easyandroid.view.Cell
                         android:layout_width="match_parent"
