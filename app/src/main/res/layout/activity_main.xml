@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:gravity="bottom"
     android:orientation="vertical">
 
@@ -26,16 +27,17 @@
       <answer.android.easyandroid.view.Group
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          app:title="无线和网络">
+          app:title="常用">
 
         <answer.android.easyandroid.view.Cell
+            android:id="@+id/picLock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
             android:paddingLeft="10dp"
-            app:desc="“JSB_MERCURY_5G”"
+            app:desc="Android 中较为常见的图案解锁"
             app:icon="@drawable/ic_wifi"
-            app:titLe="WLAN"/>
+            app:titLe="图案解锁"/>
 
         <answer.android.easyandroid.view.Cell
             android:layout_width="match_parent"

@@ -14,14 +14,23 @@
   </declare-styleable>
 
   <declare-styleable name="Cell">
-
     <attr name="underLine" format="dimension"/>
     <attr name="underLineColor" format="color"/>
     <attr name="icon" format="reference"/>
     <attr name="iconPadding" format="dimension"/>
     <attr name="titLe" format="string"/>
     <attr name="desc" format="string"/>
+  </declare-styleable>
 
+  <declare-styleable name="PicLock">
+    <attr name="row" format="integer"/>
+    <attr name="col" format="integer"/>
+    <attr name="dot_radio" format="dimension"/>
+    <attr name="dot_color" format="color"/>
+    <attr name="line_color" format="color"/>
+    <attr name="err_color" format="color"/>
+    <attr name="true_color" format="color"/>
+    <attr name="line_size" format="dimension"/>
   </declare-styleable>
 
 </resources>
