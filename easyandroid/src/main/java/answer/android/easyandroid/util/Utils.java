@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Window;
+import android.view.WindowManager;
 
 /**
  * 工具类
@@ -96,11 +98,18 @@ public class Utils {
          * @param onClickListener
          * @return
          */
-        public static AlertDialog alert(Context context, String title, String msg, DialogInterface.OnClickListener onClickListener) {
+        public static AlertDialog alert(Context context, String title, String msg,
+                                        DialogInterface.OnClickListener onClickListener) {
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     .setTitle(title)
                     .setMessage(msg)
                     .setPositiveButton("确定", onClickListener).create();
+            Window window = alertDialog.getWindow();
+            if (window !=null) {
+                // 设置弹出动画
+                WindowManager.LayoutParams layoutParams = window.getAttributes();
+                layoutParams.windowAnimations = android.R.style.Animation_Dialog;
+            }
             alertDialog.show();
             return alertDialog;
         }

@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -68,6 +69,11 @@ public class Cell extends LinearLayout {
 
         setGravity(Gravity.CENTER_VERTICAL);
 
+        // 如果没有背景的话设置一个透明背景。
+        Drawable background = getBackground();
+        if (null == background) {
+            setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
     }
 
     @Override
