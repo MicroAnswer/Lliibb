@@ -32,6 +32,7 @@ public class PicLock extends View {
     private int tryCount; // 用户绘制图案次数
     private ArrayList<Dot> userItems; // 用户绘制的图案包含的item；
     private OnResultListener onResultListener;
+    private boolean disabled; // 标记是否被禁用
 
     private float ux, uy; // 用户当前手指滑动的位置
 
@@ -44,6 +45,14 @@ public class PicLock extends View {
         super(context, attrs);
         init(context, attrs);
         onResultListener = new OnResultListener();
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -197,7 +206,7 @@ public class PicLock extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!canInput) { // 不允许输入的时候
+        if (!canInput || disabled) { // 不允许输入的时候
             return false;
         }
 
@@ -228,8 +237,8 @@ public class PicLock extends View {
             }
         } else if (action == MotionEvent.ACTION_UP) {
             canInput = false;
-            isRight = doCheck();
             tryCount++;
+            isRight = doCheck();
             isUserDrawing = false;
             performClick();
             if (!canInput) {
