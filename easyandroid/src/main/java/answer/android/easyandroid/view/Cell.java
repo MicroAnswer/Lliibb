@@ -64,7 +64,7 @@ public class Cell extends LinearLayout {
 
         content = new LinearLayout(context);
         content.setOrientation(VERTICAL);
-        content.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
+        content.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT,1));
         content.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
 
         setGravity(Gravity.CENTER_VERTICAL);
@@ -135,6 +135,7 @@ public class Cell extends LinearLayout {
 
         public HeadHelper(Context context, @Nullable AttributeSet attrs) {
             super(context, attrs);
+            setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT,1));
         }
 
         public HeadHelper setOngetTypedArray(_onGetTypedArray ongetTypedArray) {
@@ -160,9 +161,12 @@ public class Cell extends LinearLayout {
             // 标题
             titleView = new TextView(context);
             titleView.setMaxLines(1);
+            titleView.setSingleLine();
             titleView.setTextSize(16f);
             titleView.setTextColor(Color.rgb(10, 10, 10));
-            titleView.setEllipsize(TextUtils.TruncateAt.END);
+            titleView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            titleView.setMarqueeRepeatLimit(-1);
+            titleView.setSelected(true);
             titleDescView.addView(titleView);
 
             // 描述

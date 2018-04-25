@@ -13,26 +13,28 @@ import answer.android.easyandroid.view.ExpandView;
 public class MainActivity extends EasyAcctivity implements View.OnClickListener, ExpandView.OnExpanListener {
 
     private Cell picLock;
-    private Cell seeNavigationHeightCell;
-    private Cell aboutCell;
+    private Cell cell;
     private Cell seeMoreCell;
 
-    private ExpandView moreSet;
+    private ExpandView moreExpand;
     private ImageView seeMoreIconImageView;
 
     @Override
     protected void onCreat(Bundle savedInstanceState) {
+        setStatusBarNice();
         setContentView(R.layout.activity_main);
 
-        moreSet = findViewById(R.id.moreSet);
-        moreSet.setOnExpanListener(this);
+        cell = findViewById(R.id.cell);
+        cell.setOnClickListener(this);
+
+        moreExpand = findViewById(R.id.moreSet);
+        moreExpand.setOnExpanListener(this);
+
         seeMoreIconImageView = findViewById(R.id.seeMoreIconImageView);
+
         seeMoreCell = findViewById(R.id.seeMoreCell);
-        seeNavigationHeightCell = findViewById(R.id.seeNavigationHeightCell);
-        aboutCell = findViewById(R.id.aboutCell);
         seeMoreCell.setOnClickListener(this);
-        seeNavigationHeightCell.setOnClickListener(this);
-        aboutCell.setOnClickListener(this);
+
 
         picLock = findViewById(R.id.picLock);
         picLock.setOnClickListener(this);
@@ -40,15 +42,14 @@ public class MainActivity extends EasyAcctivity implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
-        if (v == seeNavigationHeightCell) {
-            alert("" + Utils.UI.getNavigationBarHeight(this));
-        } else if (aboutCell == v) {
-            alert("你好，这是一个案列App。不是设置");
-        } else if (v == seeMoreCell){
-            moreSet.toggle();
+        if (v == seeMoreCell){
+            moreExpand.toggle();
         } else if (v == picLock) {
             // 跳转九宫格解锁界面
             startActivity(new Intent(this,PicLockActivity.class));
+        } else if (v == cell) {
+            // 跳转到 cell 控件demo界面
+            startActivity(new Intent(this, CellActivity.class));
         }
     }
 

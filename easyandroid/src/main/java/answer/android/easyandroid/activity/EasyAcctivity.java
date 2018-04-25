@@ -25,10 +25,8 @@ public abstract class EasyAcctivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setStatusBarNice();
         super.onCreate(savedInstanceState);
         onCreat(savedInstanceState);
-        setToolBar();
     }
 
     /**
@@ -41,75 +39,32 @@ public abstract class EasyAcctivity extends AppCompatActivity {
     /**
      * 适配沉浸式状态栏
      */
-    private void setStatusBarNice() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //Android5.0版本
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                        | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                //设置状态栏颜色
-                getWindow().setStatusBarColor(Color.TRANSPARENT);
-                //设置导航栏颜色
-                getWindow().setNavigationBarColor(Color.TRANSPARENT);
-            } else {
-                //透明状态栏
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                //透明导航栏
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-                // 创建状态栏的管理实例
-                // tintManager = new SystemBarTintManager(this);
-                // 激活状态栏设置
-                // tintManager.setStatusBarTintEnabled(true);
+    protected void setStatusBarNice() {
+        Window window = getWindow();
 
-                // 激活导航栏设置
-                // tintManager.setNavigationBarTintEnabled(false);
-                // 设置状态栏颜色
-                // tintManager.setTintResource(Color.TRANSPARENT);
-                // 设置导航栏颜色
-                // tintManager.setNavigationBarTintResource(Color.TRANSPARENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // android 版本大于 19， 使用透明状态栏和导航栏，view会自动填充到全屏
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // android 版本大于 21，透明变成了半透明，想别的办法让导航栏透明。
+
+                // 先不让状态栏和导航栏透明了， 让它可以画颜色，后台再画一个透明颜色上去
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
+                // 让view全屏
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+
+                // 绘制导航栏和状态栏颜色
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+                // 绘制透明色，以达到导航栏和状态栏透明的目的
+                window.setStatusBarColor(Color.TRANSPARENT);
+                window.setNavigationBarColor(Color.TRANSPARENT);
             }
         }
-    }
-
-    /**
-     * 将布局文件中的ToolBar设置到界面。布局文件中的ToolBar请设置id为toolbar。
-     * 可以不在布局文件中使用Toolbar
-     */
-    private void setToolBar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            // 设置toolbar的paddTop让Toolbar不变形
-            // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //     int padingLeft = toolbar.getPaddingLeft();
-            //     int padingTop = getStatusBarHeight();
-            //     int padingRight = toolbar.getPaddingRight();
-            //     int padingBottom = toolbar.getPaddingBottom();
-            //     toolbar.setPadding(padingLeft, padingTop, padingRight, padingBottom);
-            // }
-        }
-    }
-
-    /**
-     * 获取状态栏高度
-     *
-     * @return
-     */
-    protected int getStatusBarHeight() {
-        return Utils.UI.getStatusBarHeight(this);
-    }
-
-    /**
-     * 获取导航栏高度
-     *
-     * @return
-     */
-    protected int getNativationHeight() {
-        return Utils.UI.getNavigationBarHeight(this);
     }
 
     /**

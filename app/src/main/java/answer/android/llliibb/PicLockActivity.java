@@ -18,6 +18,7 @@ public class PicLockActivity extends EasyAcctivity {
 
     @Override
     protected void onCreat(Bundle savedInstanceState) {
+        setStatusBarNice();
         setContentView(R.layout.activity_piclock);
         picLock = findViewById(R.id.picLock);
         picLock.setOnResultListener(new OnPicLockResult());

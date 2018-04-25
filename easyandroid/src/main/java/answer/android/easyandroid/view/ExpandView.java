@@ -17,18 +17,22 @@ import answer.android.easyandroid.R;
  */
 
 public class ExpandView extends ViewGroup {
+    public static final int STATUS_OPENED = 3;
+    public static final int STATUS_OPENING = 2;
+    public static final int STATUS_CLOSED = 1;
+    public static final int STATUS_CLOSING = 0;
 
-    private boolean isExpan = false; // 标记是否展开
-    private boolean closeing = false; // 是否正在关闭
-    private boolean opening = false; // 是否正在打开
-    private int unExpanHeight; // 未展开的时候的高度
-    private int trueHeight; // 能完全显示子控件的高度
+    private int status = STATUS_CLOSED; // 标记展开状态
+
+    private int closedHeight; // 未展开的时候的显示高度
+
+    private int openedHeight = -1; // 展开完成后的高度，通常不需要设置，自动通过子控件识别高度。
+
     private int layoutHeight; // 当前应该显示的高度，这个值会在展开收缩过程中变化的
-    private int animTime = 400; // ms
 
-    private boolean fromuser; // 标记是用户操作
+    private int animTime; // 展开关闭的执行时间，单位（毫秒）
 
-    private Scroller scroller;
+    private Scroller scroller; // 滚动器
 
     private OnExpanListener onExpanListener;
 
@@ -56,19 +60,22 @@ public class ExpandView extends ViewGroup {
     private void init(Context context, AttributeSet attributeSet) {
 
         // 初始化未展开的时候View高度
-        unExpanHeight = Math.round(dp2px(context, 70f));
+        closedHeight = Math.round(dp2px(context, 70f));
+
+        // 初始化默认动画时间
+        animTime = 400;
 
         // 如果有自定义的值,使用它
         if (attributeSet != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.ExpandView);
-            unExpanHeight = typedArray.getDimensionPixelSize(R.styleable.ExpandView_unexpanHeight, unExpanHeight);
-            if (unExpanHeight <= 0) {
+            closedHeight = typedArray.getDimensionPixelSize(R.styleable.ExpandView_unexpanHeight, closedHeight);
+            if (closedHeight <= 0) {
                 // 传递的值过小,
-                unExpanHeight = 0;
+                closedHeight = 0;
             }
             animTime = typedArray.getInteger(R.styleable.ExpandView_animTime, animTime);
-            if (animTime < 1) {
-                animTime = 400;
+            if (animTime < 0) { // 设置的值太小， 重新设置为0
+                animTime = 0;
             }
             typedArray.recycle();
         }
@@ -83,211 +90,179 @@ public class ExpandView extends ViewGroup {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        /**
-         * 测量规则:
-         *  宽度直接使用子View的宽度,
-         *  高度:
-         *      如果子View的高度小于收索状态的高度 --> 使用View的高度
-         *      如果子View的高度大于收缩状态的高度 --> 使用设定的最小高度
-         */
-
-        View child = getAndCheckChildView(); // 获取到子View.
-
-        if (opening || closeing) {
-            setMeasuredDimension(getMeasuredWidth(), layoutHeight);
-            if (layoutHeight == 0 && closeing && scroller != null) {
-                // 当0被设置为测量结果时，不会调用draw方法, 也就不会再computescroll什么的了。此处手动调用
-                closeing = false;
-                // Log.i("ExpandView", "sd" + String.valueOf(layoutHeight));
-                opening = false;
-                fromuser = false;
-                scroller.abortAnimation();
-                scroller.forceFinished(true);
-                computeScroll();
-            }
-            return;
-        }
-
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        // 获取控件应该的绘制宽度
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
-        child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        if (status != STATUS_CLOSING && status != STATUS_OPENING) {
 
-        int childWidth = widthSize;
+            /*
+             * 测量规则:
+             *  宽度直接使用子View的宽度,
+             *  高度:
+             *      如果子View的高度小于收索状态的高度 --> 使用View的高度
+             *      如果子View的高度大于收缩状态的高度 --> 使用设定的最小高度
+             */
 
-        trueHeight = child.getMeasuredHeight() + getPaddingTop() + getPaddingBottom();
-        int height;
-        if (!isExpan) {
-            if (trueHeight > unExpanHeight) {
-                height = unExpanHeight;
+            View child = getAndCheckChildView(); // 获取到子View.
+
+
+            // 计算子控件的绘制高度
+            child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+            openedHeight = child.getMeasuredHeight();
+
+            int height;
+            if (status == STATUS_CLOSED) {
+                // 在关闭的情况下，关闭时的高度如果大于了实际子控件的高度，此时让关闭时的高度等于实际子控件的高度
+                if (closedHeight >= openedHeight) {
+                    height = openedHeight;
+                } else {
+                    height = closedHeight;
+                }
             } else {
-                height = trueHeight;
+                height = openedHeight;
             }
+            layoutHeight = height;
         } else {
-            height = trueHeight;
+
+            // 原本这里可以什么都不用处理的， 但是有个问题
+            // Android 在绘制的时候，你要是把Measure高度设置为了0， 后续就不会继续layout也不会draw了
+            // 所以，在收缩完成后如果高度是0的时候，为了保证scroller流程的正常结束，
+            // 这里把其值设为1
+
+            if (layoutHeight == 0) {
+                layoutHeight = 1;
+            }
         }
-
-        layoutHeight = height;
-
-        // child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(layoutHeight, MeasureSpec.AT_MOST));
-
-        setMeasuredDimension(childWidth, layoutHeight);
-    }
-
-    /**
-     * 是否展开
-     *
-     * @return
-     */
-    public boolean isExpan() {
-        return isExpan;
+        setMeasuredDimension(widthSize, layoutHeight);
     }
 
     @Override
     protected void onLayout(boolean bo, int l, int t, int r, int b) {
+        // System.out.println("layout");
 
+        // 检测子控件是否只是1个，然后返回这一个
         View childView = getAndCheckChildView();
-        // Log.i("ExpandView", "l=" + l + ",t=" + t + ",r=" + r + ",b=" + b);
 
         if (childView != null) {
-            int h = trueHeight;
-            childView.layout(getPaddingLeft(), getPaddingTop(), r - getPaddingRight(), h);
+            // 始终使用子控件能完全正常绘制的高度对子控件进行绘制，以免子控件在绘制过程中变形。
+            childView.layout(getPaddingLeft(), getPaddingTop(), r - getPaddingRight(), openedHeight);
         } else {
+            // 没有子控件，使用这个ExpandView是没有多大意义的，打印一个警告信息。
             Log.w("ExpandView", "ExpandView has no child.");
         }
     }
 
     /**
-     * 展开，只有在控件是关闭的状态有用
+     * 是否展开
+     *
+     * @return true， 未展开 = false
      */
-    public boolean expan() {
-        if (!isExpan) {
-            return toggle();
-        }
-        return false;
+    public boolean isOpened() {
+        return status == STATUS_OPENED;
     }
 
     /**
-     * 收缩， 只有在控件是展开状态可用
+     * 是否展开
+     *
+     * @return true， 未展开 = false
      */
-    public boolean unExpan() {
-        if (isExpan) {
-            return toggle();
-        }
-        return false;
+    public boolean isExpan() {
+        return isOpened();
     }
 
-    public boolean close() {
-        return isExpan && toggle(false);
+    public int getStatus() {
+        return status;
     }
 
-    public boolean open() {
-        return !isExpan && toggle(false);
-    }
+    // 展开关闭操作
+    public void toggle() {
 
-    public boolean toggle() {
-        return toggle(true);
-    }
-
-    public boolean toggle(boolean b) {
-        // 如果不是用动画，直接变化
-        if (!b) {
-            if (isExpan) {
-                closeing = true;
-                opening = false;
-                layoutHeight = unExpanHeight;
-            } else {
-                closeing = false;
-                opening = true;
-                layoutHeight = trueHeight;
-            }
-            isExpan = !isExpan;
-            requestLayout();
-            invalidate();
-            if (onExpanListener != null) {
-                onExpanListener.onToggled(this, isExpan);
-            }
-            return true;
+        if (status == STATUS_CLOSING || status == STATUS_OPENING) {
+            return; // 正在打开或者关闭的时候不进行操作
         }
 
-        if (closeing || opening) {
-            // Log.i("ExpandView", "正在动作中。。。");
-            return false; // 正在打开或者关闭的时候不进行操作
+        if (openedHeight < closedHeight) {
+            Log.i("ExpandView", "子控件小于最小高度"); // 子控件高度小于最小高度，展开操作不存在了。
+            return;
         }
 
-        if (trueHeight < unExpanHeight) {
-            Log.i("ExpandView", "子控件小于最小高度");
-            // 子试图高度小于最小高度
-            return false;
-        }
-        if (scroller == null) {
-            scroller = new Scroller(getContext());
-        }
-        scroller.forceFinished(true);
-        scroller.abortAnimation();
-        if (isExpan) {
-            // 如果是打开的,就要缩小,
-            closeing = true;
-            opening = false;
-            scroller.startScroll(getMeasuredHeight(), 0, -(getMeasuredHeight() - unExpanHeight), 0, animTime);
-            // Toast.makeText(getContext(), "收缩", Toast.LENGTH_SHORT).show();
+        // 初始化滚动器
+        if (scroller == null) scroller = new Scroller(getContext());
+
+        // 结束上一次的滚动
+        // scroller.forceFinished(true);
+        // scroller.abortAnimation();
+
+        if (status == STATUS_CLOSED) { // 当前状态为关闭，执行展开操作
+            status = STATUS_OPENING;
+            int distance = openedHeight - closedHeight;
+            scroller.startScroll(0, closedHeight, 200, distance, animTime);
+            // System.out.println("start opening:" + distance);
+            _relayout();
+        } else if (status == STATUS_OPENED) { // 当前状态时展开, 执行关闭操作
+            status = STATUS_CLOSING;
+            int distance = -(openedHeight - closedHeight);
+            scroller.startScroll(0, openedHeight, -200, distance, animTime);
+            // System.out.println("start closing:" + distance);
+            _relayout();
         } else {
-            closeing = false;
-            opening = true;
-            scroller.startScroll(getMeasuredHeight(), 0, trueHeight - getMeasuredHeight(), 0, animTime);
-            // Log.i("ExpandView", String.valueOf("" + getMeasuredHeight() + 0 + (trueHeight - getMeasuredHeight()) + 0 + animTime));
-            // Toast.makeText(getContext(), "展开", Toast.LENGTH_SHORT).show();
+            System.out.println("非法状态");
         }
-        // Log.i("ExpandView", "开始动作");
-        isExpan = !isExpan;
+    }
 
-        fromuser = true;
-        forceLayout();
-        requestLayout();
-        invalidate();
-        return true;
+    private void _relayout() {
+        requestLayout(); // 请求视图大小重绘
+        invalidate(); // 请求draw方法重绘，应为scroller的使用必须调起draw方法才能正常，所以这儿调起 invalidate 方法，让draw得到执行
     }
 
     @Override
     public void computeScroll() {
         super.computeScroll();
-        // Log.i("ExpandView", "computeScroll:" + scroller);
+
         if (null == scroller) {
             return;
         }
-        if (fromuser) {
-            boolean isScrolling = scroller.computeScrollOffset();
-            // Log.i("ExpandView", "isflish:" + String.valueOf(scroller.getFinalX() + " : " + scroller.getCurrX()));
-            if (scroller.getFinalX() == scroller.getCurrX()) {
-                // Log.i("ExpandView", "完成");
-                fromuser = false;
-                closeing = false;
-                opening = false;
-                if (onExpanListener != null) {
-                    onExpanListener.onToggled(this, isExpan);
-                }
-            } else {
-                layoutHeight = scroller.getCurrX();
-                forceLayout();
-                invalidate();
-                requestLayout();
-                float p = (layoutHeight - unExpanHeight) / (float) (trueHeight - unExpanHeight);
-                // Log.i("ExpandView", "p"+String.valueOf(p));
-                if (onExpanListener != null) {
-                    onExpanListener.onToggleing(this, p);
-                }
+
+        boolean isScrolling = scroller.computeScrollOffset();
+        boolean isFinished = scroller.isFinished();
+
+        // System.out.println("layoutheight=" + layoutHeight + "\t, scroller:isFinished=" + isFinished + "\t, isScrolling=" + isScrolling);
+
+        if (isScrolling) {
+            // 在 scroller 中，通常的使用时对 x，y 坐标的滚动变化，这里我们是对高度的滚动，
+            // 将 scroller 中的 y 值 替代为我们要使用的“高度”来使用。
+            layoutHeight = scroller.getCurrY();
+
+            _relayout();
+            // 计算展开比率 0~1
+            float p = (layoutHeight - closedHeight) / (float) (openedHeight - closedHeight);
+
+            // 回调
+            if (onExpanListener != null) {
+                onExpanListener.onToggleing(this, p);
             }
         } else {
-            opening = false;
-            closeing = false;
+            // 滚动完成
+            // System.out.println("scroll complete-----------------------------");
+            if (status == STATUS_OPENING) {
+                status = STATUS_OPENED;
+            } else if (status == STATUS_CLOSING) {
+                status = STATUS_CLOSED;
+
+                layoutHeight = closedHeight;
+                _relayout();
+            }
+            // 回调
+            if (onExpanListener != null) {
+                onExpanListener.onToggleing(this, isExpan() ? 1f : 0f);
+            }
         }
     }
 
     /**
      * 获取并检查子View
      *
-     * @return
+     * @return 返回子控件
      */
     private View getAndCheckChildView() {
 

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activitybg"
+    android:orientation="vertical">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:fitsSystemWindows="true"
+      android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="Cell 控件"
+        app:titleTextColor="#FFFFFF"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+        <answer.android.easyandroid.view.Group
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="简介">
+
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="15dp"
+              android:text="本界面向你展示了如何使用 Cell 控件，快速实现类似设置界面，菜单选项等列表界面。本界面除了 Cell控件，还有 一个 Group控件，这个控件十分简单，其实就是一个竖向的 Linearlayout 带了一个标题。"/>
+        </answer.android.easyandroid.view.Group>
+
+        <answer.android.easyandroid.view.Group
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="基本的 Cell">
+
+          <answer.android.easyandroid.view.Cell
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dp"
+              app:titLe="Cell 标题"/>
+
+          <answer.android.easyandroid.view.Cell
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dp"
+              app:desc="Cell 的描述文案"
+              app:titLe="Cell 标题"/>
+
+          <answer.android.easyandroid.view.Cell
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dp"
+              app:desc="Cell 没有下横线"
+              app:titLe="Cell 标题"
+              app:underLine="0dp"/>
+
+          <answer.android.easyandroid.view.Cell
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dp"
+              app:desc="Cell 带图标的"
+              app:icon="@mipmap/ic_launcher"
+              app:titLe="Cell 标题"
+              app:underLine="0dp"/>
+        </answer.android.easyandroid.view.Group>
+
+        <answer.android.easyandroid.view.Group
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="高级的 Cell">
+
+
+          <answer.android.easyandroid.view.Cell
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dp"
+              app:desc="带自定义内容的"
+              app:icon="@mipmap/ic_launcher"
+              app:titLe="Cell 标题"
+              app:underLine="1px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:text="Hello world"/>
+          </answer.android.easyandroid.view.Cell>
+
+          <answer.android.easyandroid.view.Cell
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?android:attr/selectableItemBackground"
+              android:paddingLeft="10dp"
+              app:desc="可以点击的"
+              app:icon="@mipmap/ic_launcher"
+              app:titLe="Cell 标题"
+              app:underLine="1px">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/ic_navigate_24dp"/>
+          </answer.android.easyandroid.view.Cell>
+
+          <answer.android.easyandroid.view.Cell
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?android:attr/selectableItemBackground"
+              android:paddingLeft="10dp"
+              app:desc="描述也超级长，就算是 2 行也更本就没有办法完全显示的下来的描述文档是真的哟。你难道还不相信吗？那你自己看一下这里的文字有没有 2 行了，开玩笑，就算你在这儿显示一本小说，都没有问题的，因为我会将其省略了，哈哈哈。"
+              app:icon="@mipmap/ic_launcher"
+              app:titLe="Cell 标题超级长，长到一行没有办法完全能够将其显示下来的，旁边还有自定义内容的。"
+              app:underLine="1px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="自定义内容也长得一xx的自定义内容，哈哈哈，醉了醉了。"/>
+
+          </answer.android.easyandroid.view.Cell>
+
+        </answer.android.easyandroid.view.Group>
+      </LinearLayout>
+    </ScrollView>
+  </LinearLayout>
+</LinearLayout>

@@ -60,7 +60,11 @@ public class Group extends LinearLayout {
         // 固定使用竖向布局
         setOrientation(VERTICAL);
 
-        setBackgroundColor(-1);
+        Drawable background = getBackground();
+
+        if (null == background) {
+            setBackgroundColor(-1);
+        }
 
         if (attributeSet != null) {
 
