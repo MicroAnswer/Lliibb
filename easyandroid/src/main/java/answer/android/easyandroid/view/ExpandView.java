@@ -229,7 +229,7 @@ public class ExpandView extends ViewGroup {
         // System.out.println("layoutheight=" + layoutHeight + "\t, scroller:isFinished=" + isFinished + "\t, isScrolling=" + isScrolling);
 
         if (isScrolling) {
-            // 在 scroller 中，通常的使用时对 x，y 坐标的滚动变化，这里我们是对高度的滚动，
+            // 在 scroller 中，通常的使用是对 x，y 坐标的滚动变化，这里我们是对高度的滚动，
             // 将 scroller 中的 y 值 替代为我们要使用的“高度”来使用。
             layoutHeight = scroller.getCurrY();
 
