@@ -2,7 +2,6 @@ package answer.android.easyandroid.util;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -20,7 +19,14 @@ public class Task {
     }
 
     private Object rruunn(Object param) {
-        return iTask.run(param);
+        Object run = null;
+        try {
+            run = iTask.run(param);
+        }catch (Exception e){
+            iTask.onError(e);
+            return null;
+        }
+        return run;
     }
 
     private void rruunnEnd(Object vaue) {
@@ -49,7 +55,7 @@ public class Task {
         }
 
         public static TaskHelper getInstance() {
-            return getInstance(3);
+            return getInstance(4);
         }
 
         public static TaskHelper getInstance(int maxThreadCount) {
@@ -116,6 +122,14 @@ public class Task {
 
         }
 
+        public void stopAfterLastTaskFlish () {
+            if (taskThreads!=null){
+                for (TaskThread t: taskThreads) {
+                    t.stopAfterLastTaskFlish();
+                }
+                taskThreads.clear();
+            }
+        }
     }
 
     /**
@@ -149,6 +163,9 @@ public class Task {
                         // 在集合中没有需要运行的task的时候，线程进入wait状态，该线程将运行到这里暂停
                         while (needRunTasks == null || needRunTasks.isEmpty()) {
                             // Log.i("Mic", "任务集合为空，暂停：" + Thread.currentThread().getName());
+                            if (!isRunning){
+                                return;
+                            }
                             lock.wait();
                         }
                     }
@@ -197,6 +214,11 @@ public class Task {
          */
         private void stopAfterLastTaskFlish() {
             isRunning = false;
+            try{
+                synchronized (lock){lock.notifyAll();}
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         /**
@@ -248,13 +270,17 @@ public class Task {
          * @param param
          * @return
          */
-        abstract public Object run(Object param);
+        abstract public Object run(Object param) throws Exception;
 
         /**
          * 主线程
          *
          * @param value
          */
-        abstract public void afterRun(Object value);
+        public void afterRun(Object value){};
+
+        public void onError(Exception e){
+            e.printStackTrace();
+        }
     }
 }
