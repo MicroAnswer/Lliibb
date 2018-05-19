@@ -1,11 +1,15 @@
 package answer.android.llliibb;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import answer.android.easyandroid.activity.EasyAcctivity;
+import answer.android.easyandroid.util.Task;
 import answer.android.easyandroid.util.Utils;
 import answer.android.easyandroid.view.Cell;
 import answer.android.easyandroid.view.ExpandView;
@@ -18,6 +22,9 @@ public class MainActivity extends EasyAcctivity implements View.OnClickListener,
 
     private ExpandView moreExpand;
     private ImageView seeMoreIconImageView;
+
+    private Cell taskTestCell;
+    private int taskid;
 
     @Override
     protected void onCreat(Bundle savedInstanceState) {
@@ -38,6 +45,9 @@ public class MainActivity extends EasyAcctivity implements View.OnClickListener,
 
         picLock = findViewById(R.id.picLock);
         picLock.setOnClickListener(this);
+
+        taskTestCell = findViewById(R.id.taskTestCell);
+        taskTestCell.setOnClickListener(this);
     }
 
     @Override
@@ -50,6 +60,9 @@ public class MainActivity extends EasyAcctivity implements View.OnClickListener,
         } else if (v == cell) {
             // 跳转到 cell 控件demo界面
             startActivity(new Intent(this, CellActivity.class));
+        } else if (v == taskTestCell) {
+            // 跳转到 task 测试界面
+            startActivity(new Intent(this, TaskActivity.class));
         }
     }
 

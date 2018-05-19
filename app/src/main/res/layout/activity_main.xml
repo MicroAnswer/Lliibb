@@ -112,6 +112,19 @@
 
           </answer.android.easyandroid.view.ExpandView>
 
+
+          <answer.android.easyandroid.view.Cell
+              android:id="@+id/taskTestCell"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?android:attr/selectableItemBackground"
+              android:paddingLeft="10dp"
+              app:icon="@drawable/ic_more_horiz_black_24dp"
+              app:desc="点击测试 task 的运行"
+              app:titLe="测试 Task">
+
+          </answer.android.easyandroid.view.Cell>
+
         </answer.android.easyandroid.view.Group>
 
       </LinearLayout>

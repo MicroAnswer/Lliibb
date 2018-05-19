@@ -1,4 +1,4 @@
 <resources>
-  <string name="app_name">EasyAndroid</string>
-  <string name="btn1">按钮1</string>
+    <string name="app_name">EasyAndroid</string>
+    <string name="btn1">按钮1</string>
 </resources>
